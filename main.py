@@ -1,4 +1,4 @@
-# Ciclo típico juegos pygame
+
 
 import pygame, sys, random
 
@@ -7,7 +7,8 @@ class Corredor():
 
     
     
-    def __init__(self, x=0, y=0, disfraz="Player.png"):
+    def __init__(self, x=0, y=0, disfraz=None):
+        disfraz = self.__listaDisfraces[0] # De momento no tenemos más que uno, asi que no hacemos más
         self.disfraz= pygame.image.load("images/{}".format(disfraz))
         self.position = [x,y]
         self.name = "Jugador"
@@ -35,6 +36,9 @@ class Partida():
             corredorCreado.name = self.__listaNombres[i]
             self.runners.append(corredorCreado)
     
+    def close(self):
+        pygame.quit()
+        sys.exit()
 
     def competir(self):
         gameOver = False
@@ -50,13 +54,16 @@ class Partida():
                       gameOver = True
         
             self.__screen.blit(self.__background,(0,0))
+            
             for item in self.runners:
                 self.__screen.blit(item.disfraz, item.position)
                       
             pygame.display.flip()
         
-        pygame.quit()
-        sys.exit()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.close()
 
 
 if __name__ == "__main__":
